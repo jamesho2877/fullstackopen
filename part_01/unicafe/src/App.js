@@ -8,7 +8,7 @@ const Button = ({ text, onClick }) => {
   return <button onClick={onClick}>{text}</button>;
 };
 
-const Statistic = ({ text, counter }) => {
+const Statistics = ({ text, counter }) => {
   return <p>{text}: {counter}</p>;
 };
 
@@ -29,12 +29,12 @@ const App = () => {
       <Button text="neutral" onClick={() => setNeutral(prev => prev+1)} />
       <Button text="bad" onClick={() => setBad(prev => prev+1)} />
       <Header text="statistics"/>
-      <Statistic text="good" counter={good} />
-      <Statistic text="neutral" counter={neutral} />
-      <Statistic text="bad" counter={bad} />
-      <Statistic text="all" counter={totalFeedback} />
-      <Statistic text="average" counter={averagePoint} />
-      <Statistic text="positive" counter={`${positivePercentage} %`} />
+      <Statistics text="good" counter={good} />
+      <Statistics text="neutral" counter={neutral} />
+      <Statistics text="bad" counter={bad} />
+      <Statistics text="all" counter={totalFeedback} />
+      <Statistics text="average" counter={averagePoint} />
+      <Statistics text="positive" counter={`${positivePercentage} %`} />
     </>
   );
 };
