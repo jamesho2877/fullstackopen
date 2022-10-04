@@ -1,8 +1,7 @@
 import { useState } from "react";
-
-const Header = ({ text }) => {
-  return <h2>{text}</h2>;
-};
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -11,6 +10,7 @@ const App = () => {
     { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ]);
+
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterKeyword, setFilterKeyword] = useState("");
@@ -33,7 +33,7 @@ const App = () => {
   const handleAddPerson = (e) => {
     e.preventDefault();
 
-    const isNameExisted = persons.filter(person => person.name === newName).length > 0;
+    const isNameExisted = persons.filter(person => person.name.toLowerCase() === newName.toLowerCase()).length > 0;
     if (isNameExisted) {
       alert(`${newName} is already added to phonebook`);
       return;
@@ -47,35 +47,23 @@ const App = () => {
     setNewNumber("");
   };
 
-  const filteredPersons = filterKeyword.length > 0
-    ? persons.filter(person => person.name.toLowerCase().includes(filterKeyword.toLowerCase()))
-    : persons;
-  const nameListDOM = filteredPersons.map(person => (
-    <div key={person.name}>{person.name} {person.number}</div>
-  ));
-
   return (
     <div>
-      <Header text="Phonebook" />
-      <div>
-        filter shown with: <input value={filterKeyword} onChange={handleFilterChange}/>
-      </div>
+      <h2>Phonebook</h2>
+      <Filter
+        filterKeyword={filterKeyword}
+        onFilterChange={handleFilterChange} />
 
-      <Header text="add a new" />
-      <form>
-        <div>
-          name: <input value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit" onClick={handleAddPerson}>add</button>
-        </div>
-      </form>
+      <h3>Add a new</h3>
+      <PersonForm
+        newName={newName}
+        newNumber={newNumber}
+        onNameChange={handleNameChange}
+        onNumberChange={handleNumberChange}
+        onAddPerson={handleAddPerson} />
 
-      <Header text="Numbers" />
-      {nameListDOM}
+      <h3>Numbers</h3>
+      <Persons persons={persons} filterKeyword={filterKeyword} />
     </div>
   );
 };
