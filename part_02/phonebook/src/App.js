@@ -15,6 +15,13 @@ const App = () => {
 
   const handleAddPerson = (e) => {
     e.preventDefault();
+
+    const isNameExisted = persons.filter(person => person.name === newName).length > 0;
+    if (isNameExisted) {
+      alert(`${newName} is already added to phonebook`);
+      return;
+    }
+
     setPersons(prev => prev.concat({ name: newName }));
     setNewName("");
   };
