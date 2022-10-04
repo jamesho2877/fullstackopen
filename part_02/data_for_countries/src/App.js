@@ -4,6 +4,7 @@ import axios from "axios";
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const [quickView, setQuickView] = useState(null);
 
   useEffect(() => {
     axios
@@ -14,6 +15,11 @@ const App = () => {
   const handleKeywordChange = (e) => {
     const keyword = e.target.value;
     setKeyword(keyword);
+    setQuickView(null);
+  };
+
+  const handleShowCountry = (country) => {
+    setQuickView(country);
   };
 
   const filteredCountries = countries.filter(country => {
@@ -41,13 +47,22 @@ const App = () => {
     ? <div>Too many matches, specify another filter</div>
     : filteredCountries.length === 1
       ? getCountryDOM(filteredCountries[0])
-      : filteredCountries.map(country => <div key={country.name.common}>{country.name.common}</div>);
+      : filteredCountries.map(country => {
+          const countryName = country.name.common;
+          return (
+            <div key={countryName}>
+              <span>{countryName}</span>
+              <button onClick={() => handleShowCountry(country)}>show</button>
+            </div>
+          )
+        });
 
   return (
     <div>
       <span>find countries</span>
       <input value={keyword} onChange={handleKeywordChange} />
       <div>{countryListDOM}</div>
+      <div>{quickView ? getCountryDOM(quickView): ""}</div>
     </div>
   );
 };
