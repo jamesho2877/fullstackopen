@@ -5,12 +5,18 @@ const Header = ({ text }) => {
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([{ name: "Arto Hellas", number: "040-1234567" }]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const handleNameChange = (e) => {
-    const val = e.target.value;
-    setNewName(val);
+    const name = e.target.value;
+    setNewName(name);
+  };
+
+  const handleNumberChange = (e) => {
+    const number = e.target.value;
+    setNewNumber(number);
   };
 
   const handleAddPerson = (e) => {
@@ -22,12 +28,16 @@ const App = () => {
       return;
     }
 
-    setPersons(prev => prev.concat({ name: newName }));
+    setPersons(prev => prev.concat({
+      name: newName,
+      number: newNumber,
+    }));
     setNewName("");
+    setNewNumber("");
   };
 
   const nameListDOM = persons.map(person => (
-    <div key={person.name}>{person.name}</div>
+    <div key={person.name}>{person.name} {person.number}</div>
   ));
 
   return (
@@ -36,6 +46,9 @@ const App = () => {
       <form>
         <div>
           name: <input value={newName} onChange={handleNameChange}/>
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleNumberChange}/>
         </div>
         <div>
           <button type="submit" onClick={handleAddPerson}>add</button>
