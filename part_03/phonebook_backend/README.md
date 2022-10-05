@@ -11,3 +11,5 @@ The following exercises can be found in this directory
 ### 3.4: Phonebook backend step4
 
 ### 3.5: Phonebook backend step5
+
+### 3.6: Phonebook backend step6

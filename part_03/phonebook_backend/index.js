@@ -64,6 +64,13 @@ app.post("/api/persons", (request, response) => {
     });
   }
 
+  const isPersonExisted = persons.find(p => p.name.toLowerCase().includes(name.toLowerCase()));
+  if (isPersonExisted) {
+    return response.status(409).json({
+      error: "contact person is already existed",
+    });
+  }
+
   const newPerson = {
     id: Math.floor(1000000 + Math.random() * 9999999),
     name: name,
