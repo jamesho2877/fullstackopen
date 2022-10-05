@@ -31,6 +31,30 @@ const App = () => {
     setFilterKeyword(keyword);
   };
 
+  const handleDeletePerson = (person) => {
+    const personName = person.name;
+    const confirmed = window.confirm(`Delete ${personName} ?`);
+    if (!confirmed) return;
+
+    personService
+      .delete(person.id)
+      .then(deletedSuceeded => {
+        if (deletedSuceeded) {
+          setPersons(prev => prev.filter(p => p.id !== person.id));
+        } else {
+          alert(`Unable to delete ${personName}`);
+        }
+      })
+      .catch(err => {
+        if (err.response.status === 404) {
+          alert(`${personName} was already deleted`);
+          setPersons(prev => prev.filter(p => p.id !== person.id));
+        } else {
+          alert(`Unable to delete ${personName}`);
+        }
+      })
+  };
+
   const handleAddPerson = (e) => {
     e.preventDefault();
 
@@ -66,7 +90,10 @@ const App = () => {
         onAddPerson={handleAddPerson} />
 
       <h3>Numbers</h3>
-      <Persons persons={persons} filterKeyword={filterKeyword} />
+      <Persons
+        persons={persons}
+        filterKeyword={filterKeyword}
+        onDeletePerson={handleDeletePerson} />
     </div>
   );
 };
