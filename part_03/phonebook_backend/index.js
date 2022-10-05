@@ -26,8 +26,10 @@ let persons = [
   },
 ];
 
+morgan.token("body", (req, res) => JSON.stringify(req.body));
+
 app.use(express.json());
-app.use(morgan("combined"));
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
 
 app.get("/info", (request, response) => {
   response.send(`
