@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import Notification from "./components/Notification";
+import Notification, { NOTI_SUCCESS, NOTI_ERROR } from "./components/Notification";
 import personService from "./services/persons";
 
 const App = () => {
@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterKeyword, setFilterKeyword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [noti, setNoti] = useState({});
 
   useEffect(() => {
     personService
@@ -33,9 +33,12 @@ const App = () => {
     setFilterKeyword(keyword);
   };
 
-  const handleSetMessage = (message) => {
-    setErrorMessage(message);
-    window.setTimeout(() => setErrorMessage(null), 5000);
+  const handleSetMessage = (messageText, messageType) => {
+    setNoti({
+      message: messageText,
+      type: messageType,
+    });
+    window.setTimeout(() => setNoti({}), 5000);
   };
 
   const handleDeletePerson = (person) => {
@@ -59,7 +62,7 @@ const App = () => {
         } else {
           alert(`Unable to delete ${personName}`);
         }
-      })
+      });
   };
 
   const handleExistedPerson = (existedPerson) => {
@@ -75,6 +78,14 @@ const App = () => {
         setPersons(prev => prev.map(p => p.id !== updatedPerson.id ? p : updatedPerson))
         setNewName("");
         setNewNumber("");
+      })
+      .catch(err => {
+        if (err.response.status === 404) {
+          handleSetMessage(`Information of ${existedPerson.name} has already been removed from server`, NOTI_ERROR);
+          setPersons(prev => prev.filter(p => p.id !== existedPerson.id));
+        } else {
+          alert(`Unable to update ${existedPerson.name}`);
+        }
       });
   }
 
@@ -91,7 +102,7 @@ const App = () => {
       name: newName,
       number: newNumber,
     }).then(newlyAddedPerson => {
-      handleSetMessage(`Added ${newName}`);
+      handleSetMessage(`Added ${newName}`, NOTI_SUCCESS);
       setPersons(prev => prev.concat(newlyAddedPerson));
       setNewName("");
       setNewNumber("");
@@ -101,7 +112,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification message={noti.message} type={noti.type} />
       <Filter
         filterKeyword={filterKeyword}
         onFilterChange={handleFilterChange} />

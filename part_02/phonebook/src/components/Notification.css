@@ -8,5 +8,13 @@
 }
 
 .info {
+  color: lightseagreen;
+}
+
+.success {
   color: green;
+}
+
+.error {
+  color: red;
 }

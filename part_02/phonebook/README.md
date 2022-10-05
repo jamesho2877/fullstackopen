@@ -23,3 +23,5 @@ The following exercises can be found in this directory
 ### 2.18*: Phonebook step10
 
 ### 2.19: Phonebook step11
+
+### 2.20*: Phonebook step12
