@@ -55,12 +55,28 @@ const App = () => {
       })
   };
 
+  const handleExistedPerson = (existedPerson) => {
+    const confirmed = window.confirm(`${existedPerson.name} is already added to phonebook, replace the old number with a new one?`);
+    if (!confirmed) return;
+
+    personService
+      .update(
+        existedPerson.id,
+        { ...existedPerson, number: newNumber }
+      )
+      .then(updatedPerson => {
+        setPersons(prev => prev.map(p => p.id !== updatedPerson.id ? p : updatedPerson))
+        setNewName("");
+        setNewNumber("");
+      });
+  }
+
   const handleAddPerson = (e) => {
     e.preventDefault();
 
-    const isNameExisted = persons.filter(person => person.name.toLowerCase() === newName.toLowerCase()).length > 0;
-    if (isNameExisted) {
-      alert(`${newName} is already added to phonebook`);
+    const existedPerson = persons.filter(person => person.name.toLowerCase() === newName.toLowerCase())[0];
+    if (existedPerson) {
+      handleExistedPerson(existedPerson);
       return;
     }
 
