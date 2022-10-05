@@ -15,3 +15,5 @@ The following exercises can be found in this directory
 ### 2.11: The Phonebook Step6
 
 ### 2.15: Phonebook step7
+
+### 2.16: Phonebook step8
