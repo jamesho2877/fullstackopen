@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 import personService from "./services/persons";
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterKeyword, setFilterKeyword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     personService
@@ -29,6 +31,11 @@ const App = () => {
   const handleFilterChange = (e) => {
     const keyword = e.target.value;
     setFilterKeyword(keyword);
+  };
+
+  const handleSetMessage = (message) => {
+    setErrorMessage(message);
+    window.setTimeout(() => setErrorMessage(null), 5000);
   };
 
   const handleDeletePerson = (person) => {
@@ -84,6 +91,7 @@ const App = () => {
       name: newName,
       number: newNumber,
     }).then(newlyAddedPerson => {
+      handleSetMessage(`Added ${newName}`);
       setPersons(prev => prev.concat(newlyAddedPerson));
       setNewName("");
       setNewNumber("");
@@ -93,6 +101,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter
         filterKeyword={filterKeyword}
         onFilterChange={handleFilterChange} />
