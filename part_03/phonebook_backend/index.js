@@ -59,12 +59,6 @@ app.put("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
   const { number } = request.body || {};
 
-  if (!id || !number) {
-    return response.status(400).json({
-      error: "content missing",
-    });
-  }
-
   Person
     .findByIdAndUpdate(
       id,
@@ -84,13 +78,6 @@ app.put("/api/persons/:id", (request, response, next) => {
 
 app.post("/api/persons", (request, response, next) => {
   const { name, number } = request.body || {};
-
-  if (!name || !number) {
-    console.log("1", name, number);
-    return response.status(400).json({
-      error: "content missing",
-    });
-  }
 
   Person
     .findOne({ name })

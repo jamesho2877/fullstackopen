@@ -21,6 +21,12 @@ const personSchema = new mongoose.Schema({
   },
   number: {
     type: String,
+    minLength: 8,
+    validate: {
+      validator: (v) => /^\d{2,3}-\d{6,}$/.test(v),
+      message: (props) => `${props.value} does not have a valid format. It needs to be in the format similar to 09-1234556 or 040-22334455`
+    },
+    required: [true, "User phone number required"]
   },
 });
 
