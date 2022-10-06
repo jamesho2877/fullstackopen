@@ -77,7 +77,7 @@ const App = () => {
       )
       .then(updatedPerson => {
         handleSetMessage(`Updated ${updatedPerson.name}`, NOTI_SUCCESS);
-        setPersons(prev => prev.map(p => p.id !== updatedPerson.id ? p : updatedPerson))
+        setPersons(prev => prev.map(p => p.id !== updatedPerson.id ? p : updatedPerson));
         setNewName("");
         setNewNumber("");
       })
@@ -89,7 +89,7 @@ const App = () => {
           handleSetMessage(err.response.data.error || err.message, NOTI_ERROR);
         }
       });
-  }
+  };
 
   const handleAddPerson = (e) => {
     e.preventDefault();

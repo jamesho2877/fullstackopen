@@ -7,3 +7,5 @@ The following exercises can be found in this directory
 ### 3.11: Phonebook full stack
 
 ### 3.19*: Phonebook database, step7
+
+### 3.22: Lint configuration
