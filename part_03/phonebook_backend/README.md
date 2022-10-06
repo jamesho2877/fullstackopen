@@ -31,3 +31,5 @@ The following exercises can be found in this directory
 ### 3.14: Phonebook database, step2
 
 ### 3.15: Phonebook database, step3
+
+### 3.16: Phonebook database, step4
