@@ -1,32 +1,12 @@
+require("dotenv").config({ path: "./.env.local" });
+
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const Person = require("./models/person");
 const app = express();
 
 const PORT = process.env.PORT || 3001;
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
-
 morgan.token("body", (req, res) => JSON.stringify(req.body));
 
 app.use(express.static("build"));
@@ -35,35 +15,50 @@ app.use(express.json());
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
 
 app.get("/info", (request, response) => {
-  response.send(`
-    <div>Phonebook has info for ${persons.length} people</div>
-    <p>${new Date()}</p>
-  `);
+  Person.find({}).then((people) => {
+    response.send(`
+      <div>Phonebook has info for ${people.length} people</div>
+      <p>${new Date()}</p>
+    `);
+  });
 });
 
 app.get("/api/persons", (request, response) => {
-  response.json(persons);
+  Person.find({}).then((people) => {
+    response.json(people);
+  });
 });
 
 app.get("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const person = persons.find(p => p.id === id);
-  
-  if (person) {
-    response.json(person);
-  } else {
-    response.status(204).end();
-  }
+  const id = request.params.id;
+
+  Person
+    .findById(id)
+    .then((queriedPerson) => {
+      response.json(queriedPerson);
+    })
+    .catch((err) => {
+      console.error(err);
+      response.status(204).end();
+    });
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  persons = persons.filter(p => p.id !== id);
-  response.status(204).end();
+  const id = request.params.id;
+
+  Person
+    .findByIdAndDelete(id)
+    .then((deletedPerson) => {
+      response.status(204).end();
+    })
+    .catch((err) => {
+      console.error(err);
+      response.status(204).end();
+    });
 });
 
 app.put("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
+  const id = request.params.id;
   const { number } = request.body || {};
 
   if (!id || !number) {
@@ -72,11 +67,15 @@ app.put("/api/persons/:id", (request, response) => {
     });
   }
 
-  const curPerson = persons.find(p => p.id === id);
-  const newPerson = { ...curPerson, number: number };
-  persons = persons.map(p => p.id === newPerson.id ? newPerson : p);
-
-  response.json(newPerson);
+  Person
+    .findByIdAndUpdate(id, { number }, { returnDocument: "after" })
+    .then((updatedPerson) => {
+      response.json(updatedPerson);
+    })
+    .catch((err) => {
+      console.error(err);
+      response.status(204).end();
+    });
 });
 
 app.post("/api/persons", (request, response) => {
@@ -88,22 +87,34 @@ app.post("/api/persons", (request, response) => {
     });
   }
 
-  const isPersonExisted = persons.find(p => p.name.toLowerCase().includes(name.toLowerCase()));
-  if (isPersonExisted) {
-    return response.status(409).json({
-      error: "contact person is already existed",
+  Person
+    .findOne({ name })
+    .then((queriedPerson) => {
+      if (queriedPerson) {
+        return response.status(409).json({
+          error: "contact person is already existed",
+        });
+      }
+
+      const person = new Person({
+        name: name,
+        number: number,
+      });
+    
+      person
+        .save()
+        .then((newPerson) => {
+          response.json(newPerson);
+        })
+        .catch((err) => {
+          console.error(err);
+          response.status(204).end();
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+      response.status(204).end();
     });
-  }
-
-  const newPerson = {
-    id: Math.floor(1000000 + Math.random() * 9999999),
-    name: name,
-    number: number,
-  };
-
-  persons = persons.concat(newPerson);
-
-  response.json(newPerson);
 });
 
 app.listen(PORT, () => {

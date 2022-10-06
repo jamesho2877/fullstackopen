@@ -25,3 +25,5 @@ The following exercises can be found in this directory
 ### 3.11: Phonebook full stack
 
 ### 3.12: Command-line database
+
+### 3.13: Phonebook database, step1
