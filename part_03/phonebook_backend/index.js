@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const app = express();
 
 const PORT = 3001;
@@ -28,6 +29,7 @@ let persons = [
 
 morgan.token("body", (req, res) => JSON.stringify(req.body));
 
+app.use(cors());
 app.use(express.json());
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
 
@@ -57,6 +59,23 @@ app.delete("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
   persons = persons.filter(p => p.id !== id);
   response.status(204).end();
+});
+
+app.put("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id);
+  const { number } = request.body || {};
+
+  if (!id || !number) {
+    return response.status(400).json({
+      error: "content missing",
+    });
+  }
+
+  const curPerson = persons.find(p => p.id === id);
+  const newPerson = { ...curPerson, number: number };
+  persons = persons.map(p => p.id === newPerson.id ? newPerson : p);
+
+  response.json(newPerson);
 });
 
 app.post("/api/persons", (request, response) => {
