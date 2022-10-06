@@ -50,17 +50,18 @@ const App = () => {
       .delete(person.id)
       .then(deletedSuceeded => {
         if (deletedSuceeded) {
+          handleSetMessage(`Deleted ${personName}`, NOTI_SUCCESS);
           setPersons(prev => prev.filter(p => p.id !== person.id));
         } else {
-          alert(`Unable to delete ${personName}`);
+          handleSetMessage(`Unable to delete ${personName}`, NOTI_ERROR);
         }
       })
       .catch(err => {
         if (err.response.status === 404) {
-          alert(`${personName} was already deleted`);
+          handleSetMessage(`${personName} was already deleted`, NOTI_ERROR);
           setPersons(prev => prev.filter(p => p.id !== person.id));
         } else {
-          alert(`Unable to delete ${personName}`);
+          handleSetMessage(err.response.data.error || err.message, NOTI_ERROR);
         }
       });
   };
@@ -75,6 +76,7 @@ const App = () => {
         { ...existedPerson, number: newNumber }
       )
       .then(updatedPerson => {
+        handleSetMessage(`Updated ${updatedPerson.name}`, NOTI_SUCCESS);
         setPersons(prev => prev.map(p => p.id !== updatedPerson.id ? p : updatedPerson))
         setNewName("");
         setNewNumber("");
@@ -84,7 +86,7 @@ const App = () => {
           handleSetMessage(`Information of ${existedPerson.name} has already been removed from server`, NOTI_ERROR);
           setPersons(prev => prev.filter(p => p.id !== existedPerson.id));
         } else {
-          alert(`Unable to update ${existedPerson.name}`);
+          handleSetMessage(err.response.data.error || err.message, NOTI_ERROR);
         }
       });
   }
@@ -106,6 +108,8 @@ const App = () => {
       setPersons(prev => prev.concat(newlyAddedPerson));
       setNewName("");
       setNewNumber("");
+    }).catch((err) => {
+      handleSetMessage(err.response.data.error || err.message, NOTI_ERROR);
     });
   };
 
