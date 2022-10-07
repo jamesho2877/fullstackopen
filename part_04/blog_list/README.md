@@ -25,3 +25,5 @@ The following exercises can be found in this directory
 ### 4.11*: Blog list tests, step4
 
 ### 4.12*: Blog list tests, step5
+
+### 4.13 Blog list expansions, step1
