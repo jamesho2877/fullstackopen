@@ -72,6 +72,42 @@ test("blog's likes property is 0 if not given", async () => {
   expect(blog.likes).toEqual(0);
 });
 
+test("error code of 400 will be returned if title is missing", async () => {
+  const newBlog = {
+    author: "Walter Isaacson",
+    url: "https://en.wikipedia.org/wiki/Steve_Jobs_(book)",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400);
+});
+
+test("error code of 400 will be returned if url is missing", async () => {
+  const newBlog = {
+    title: "Steve Jobs",
+    author: "Walter Isaacson",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400);
+});
+
+test("error code of 400 is returned if both title and url are missing", async () => {
+  const newBlog = {
+    author: "Walter Isaacson",
+    likes: 13,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
