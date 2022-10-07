@@ -27,10 +27,31 @@ test("all blogs are returned", async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length);
 });
 
-test("should have id property", async () => {
+test("all blogs should have id property", async () => {
   const response = await api.get("/api/blogs");
-  const blogs = response.body.filter(blog => blog.id);
+  const blogs = response.body.filter((blog) => blog.id);
   expect(blogs).toHaveLength(response.body.length);
+});
+
+test("a valid blog can be added", async () => {
+  const newBlog = {
+    title: "Steve Jobs",
+    author: "Walter Isaacson",
+    url: "https://en.wikipedia.org/wiki/Steve_Jobs_(book)",
+    likes: 13,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const allBlogs = await helper.blogsInDb();
+  expect(allBlogs).toHaveLength(helper.initialBlogs.length + 1);
+
+  const contents = allBlogs.map((blog) => blog.author);
+  expect(contents).toContain("Walter Isaacson");
 });
 
 afterAll(() => {
