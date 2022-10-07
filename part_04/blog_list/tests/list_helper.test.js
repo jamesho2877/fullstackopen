@@ -165,3 +165,90 @@ describe("favorite blog", () => {
     expect(result).toEqual(blogs[2]);
   });
 });
+
+describe("most blogs", () => {
+  test("in a list of none, is undefined", () => {
+    const blogs = [];
+
+    const result = listHelper.mostBlogs(blogs);
+    expect(result).toEqual(undefined);
+  });
+
+  test("in a list of solely one blog, is exactly itself", () => {
+    const blogs = [
+      {
+        title: "Canonical string reduction",
+        author: "Edsger W. Dijkstra",
+        likes: 12,
+      },
+    ];
+
+    const result = listHelper.mostBlogs(blogs);
+    expect(result).toEqual({
+      author: "Edsger W. Dijkstra",
+      blogs: 1,
+    });
+  });
+
+  test("in a list of two, where likes are the same, should be the first one", () => {
+    const blogs = [
+      {
+        title: "Canonical string reduction",
+        author: "Edsger W. Dijkstra",
+        likes: 5,
+      },
+      {
+        title: "First class tests",
+        author: "Robert C. Martin",
+        likes: 5,
+      }
+    ];
+
+    const result = listHelper.mostBlogs(blogs);
+    expect(result).toEqual({
+      author: "Edsger W. Dijkstra",
+      blogs: 1,
+    });
+  });
+
+  test("in a list of many, should be the one with most blogs", () => {
+    const blogs = [
+      {
+        title: "React patterns",
+        author: "Michael Chan",
+        likes: 7,
+      },
+      {
+        title: "Go To Statement Considered Harmful",
+        author: "Edsger W. Dijkstra",
+        likes: 5,
+      },
+      {
+        title: "Canonical string reduction",
+        author: "Edsger W. Dijkstra",
+        likes: 12,
+      },
+      {
+        title: "First class tests",
+        author: "Robert C. Martin",
+        likes: 10,
+      },
+      {
+        title: "TDD harms architecture",
+        author: "Robert C. Martin",
+        likes: 0,
+      },
+      {
+        title: "Type wars",
+        author: "Robert C. Martin",
+        likes: 2,
+      },
+    ];
+
+    const result = listHelper.mostBlogs(blogs);
+    expect(result).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3,
+    });
+  });
+});

@@ -11,3 +11,5 @@ The following exercises can be found in this directory
 ### 4.4: Helper functions and unit tests, step2
 
 ### 4.5*: Helper functions and unit tests, step3
+
+### 4.6*: Helper functions and unit tests, step4
