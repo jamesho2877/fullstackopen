@@ -133,6 +133,23 @@ describe("deletion of a blog", () => {
   });
 });
 
+describe("amendment of a blog", () => {
+  test("likes is changed after updated", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+
+    const newLikes = 5;
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send({ likes: newLikes })
+      .expect(200);
+
+    const updatedBlog = await helper.blogsInDb("id", blogToUpdate.id);
+    expect(updatedBlog.likes).toEqual(newLikes);
+    expect(updatedBlog.likes).not.toEqual(blogToUpdate.likes);
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
