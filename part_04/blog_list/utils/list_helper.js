@@ -30,9 +30,26 @@ const mostBlogs = (blogs) => {
   };
 };
 
+const mostLikes = (blogs) => {
+  const blogMap = blogs.reduce((acc, blog) => {
+    const pastLikes = acc[blog.author] || 0;
+    acc[blog.author] = pastLikes + blog.likes;
+    return acc;
+  }, {});
+
+  const mostLikedBlog = Object.entries(blogMap).sort(([authorA, likesA], [authorB, likesB]) => likesB - likesA)[0];
+
+  if (!mostLikedBlog) return;
+  return {
+    author: mostLikedBlog[0],
+    likes: mostLikedBlog[1],
+  };
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
