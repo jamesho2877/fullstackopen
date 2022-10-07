@@ -3,3 +3,5 @@
 The following exercises can be found in this directory
 
 ### 4.1 Blog list, step1
+
+### 4.2 Blog list, step2
