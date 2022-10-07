@@ -47,7 +47,12 @@ const nonExistingId = async () => {
   return blog._id.toString();
 };
 
-const blogsInDb = async () => {
+const blogsInDb = async (propName, propValue) => {
+  if (propName && propValue) {
+    const blog = await Blog.findOne({ [propName]: propValue });
+    return blog.toJSON();
+  }
+
   const blogs = await Blog.find({});
   return blogs.map((blog) => blog.toJSON());
 };

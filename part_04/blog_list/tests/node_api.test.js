@@ -54,6 +54,24 @@ test("a valid blog can be added", async () => {
   expect(contents).toContain("Walter Isaacson");
 });
 
+test("blog's likes property is 0 if not given", async () => {
+  const newBlog = {
+    title: "Steve Jobs",
+    author: "Walter Isaacson",
+    url: "https://en.wikipedia.org/wiki/Steve_Jobs_(book)",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blog = await helper.blogsInDb("title", "Steve Jobs");
+  expect(blog.likes).toBeDefined();
+  expect(blog.likes).toEqual(0);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
