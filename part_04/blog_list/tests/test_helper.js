@@ -1,4 +1,5 @@
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 const initialBlogs = [
   {
@@ -57,8 +58,19 @@ const blogsInDb = async (propName, propValue) => {
   return blogs.map((blog) => blog.toJSON());
 };
 
+const usersInDb = async (propName, propValue) => {
+  if (propName && propValue) {
+    const user = await User.findOne({ [propName]: propValue });
+    return user.toJSON();
+  }
+
+  const users = await User.find({});
+  return users.map((user) => user.toJSON());
+};
+
 module.exports = {
   initialBlogs,
   nonExistingId,
   blogsInDb,
+  usersInDb,
 };

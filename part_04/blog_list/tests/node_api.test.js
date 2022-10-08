@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
+const bcrypt = require("bcrypt");
 const helper = require("./test_helper");
 const app = require("../app");
 const api = supertest(app);
 
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -147,6 +149,84 @@ describe("amendment of a blog", () => {
     const updatedBlog = await helper.blogsInDb("id", blogToUpdate.id);
     expect(updatedBlog.likes).toEqual(newLikes);
     expect(updatedBlog.likes).not.toEqual(blogToUpdate.likes);
+  });
+});
+
+describe("user account creation", () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+  });
+
+  test("valid user account", async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: "myusername",
+      name: "John Smith",
+      password: "mypassword",
+    };
+
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1);
+
+    const usernames = usersAtEnd.map((u) => u.username);
+    expect(usernames).toContain(newUser.username);
+  });
+
+  test("invalid user account with a missing username", async () => {
+    const newUser = {
+      name: "John Smith",
+      password: "mypassword",
+    };
+
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400);
+  });
+
+  test("invalid user account with a short username", async () => {
+    const newUser = {
+      username: "my",
+      name: "John Smith",
+      password: "mypassword",
+    };
+
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400);
+  });
+
+  test("invalid user account with a missing password", async () => {
+    const newUser = {
+      username: "myusername",
+      name: "John Smith",
+    };
+
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400);
+  });
+
+  test("invalid user account with a short password", async () => {
+    const newUser = {
+      username: "myusername",
+      name: "John Smith",
+      password: "my",
+    };
+
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400);
   });
 });
 
