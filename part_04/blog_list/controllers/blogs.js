@@ -1,10 +1,7 @@
-const jwt = require("jsonwebtoken");
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require("../models/user");
-
-const { SECRET } = process.env;
-
+const middleware = require("../utils/middleware");
 
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", {
@@ -14,13 +11,11 @@ blogsRouter.get("/", async (request, response) => {
   response.json(blogs);
 });
 
-blogsRouter.post("/", async (request, response) => {
-  const decodedToken = jwt.verify(request.token, SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token is missing or invalid" });
-  }
 
-  const user = await User.findById(decodedToken.id);
+blogsRouter.use(middleware.auth);
+
+blogsRouter.post("/", async (request, response) => {
+  const user = await User.findById(request.userId);
   const blog = new Blog({ ...request.body, user: user._id });
   const savedBlog = await blog.save();
   user.blogs = user.blogs.concat(savedBlog._id);
@@ -31,7 +26,20 @@ blogsRouter.post("/", async (request, response) => {
 blogsRouter.delete("/:id", async (request, response) => {
   const id = request.params.id;
 
-  const deletedBlog = await Blog.findByIdAndDelete(id);
+  const blog = await Blog.findOne({ id });
+  if (!blog) {
+    return response.status(400).json({
+      error: `blog ${id} is not existed`,
+    });
+  }
+  
+  if (blog.user._id.toString() !== request.userId) {
+    return response.status(403).json({
+      error: "permisson denied",
+    });
+  }
+
+  const deletedBlog = await Blog.deleteOne({ id });
   response.status(204).end();
 });
 
