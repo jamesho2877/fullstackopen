@@ -3,6 +3,7 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 const middleware = require("../utils/middleware");
 
+
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", {
     username: 1,
@@ -13,6 +14,7 @@ blogsRouter.get("/", async (request, response) => {
 
 
 blogsRouter.use(middleware.auth);
+
 
 blogsRouter.post("/", async (request, response) => {
   const user = await User.findById(request.userId);

@@ -43,3 +43,5 @@ The following exercises can be found in this directory
 ### 4.20*: Blog list expansions, step8
 
 ### 4.21*: Blog list expansions, step9
+
+### 4.22*: Blog list expansions, step10

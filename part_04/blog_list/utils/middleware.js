@@ -51,10 +51,16 @@ const auth = (request, response, next) => {
   next();
 };
 
+const userExtractor = async (request, response, next) => {
+  request.user = await User.findById(request.userId);
+  next();
+};
+
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
   auth,
+  userExtractor,
 };
