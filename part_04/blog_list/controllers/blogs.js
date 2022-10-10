@@ -5,10 +5,7 @@ const middleware = require("../utils/middleware");
 
 
 blogsRouter.get("/", async (request, response) => {
-  const blogs = await Blog.find({}).populate("user", {
-    username: 1,
-    name: 1,
-  });
+  const blogs = await Blog.find({});
   response.json(blogs);
 });
 
@@ -26,31 +23,45 @@ blogsRouter.post("/", async (request, response) => {
 });
 
 blogsRouter.delete("/:id", async (request, response) => {
-  const id = request.params.id;
+  const blogId = request.params.id;
 
-  const blog = await Blog.findOne({ id });
+  const blog = await Blog.findOne({ _id: blogId, user: { _id: request.userId } });
   if (!blog) {
     return response.status(400).json({
-      error: `blog ${id} is not existed`,
+      error: `blog ${blogId} is not existed`,
     });
   }
-  
+
   if (blog.user._id.toString() !== request.userId) {
     return response.status(403).json({
       error: "permisson denied",
     });
   }
 
-  const deletedBlog = await Blog.deleteOne({ id });
+  // delete blog
+  const deletedBlog = await Blog.findByIdAndDelete(blogId);
+
+  // update blog's reference on user
+  const user = await User.findById(request.userId);
+  user.blogs.pull(deletedBlog._id);
+  await user.save();
+
   response.status(204).end();
 });
 
 blogsRouter.put("/:id", async (request, response) => {
-  const id = request.params.id;
+  const blogId = request.params.id;
   const { likes } = request.body || {};
 
+  const blog = await Blog.findOne({ _id: blogId, user: { _id: request.userId } });
+  if (!blog) {
+    return response.status(400).json({
+      error: `blog ${blogId} is not existed`,
+    });
+  }
+
   const updatedPerson = await Blog.findByIdAndUpdate(
-    id,
+    blogId,
     { likes },
     {
       returnDocument: "after",

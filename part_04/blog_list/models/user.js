@@ -5,10 +5,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     minLength: 3,
     required: true,
+    autopopulate: true,
   },
   name: {
     type: String,
     required: false,
+    autopopulate: true,
   },
   passwordHash: {
     type: String,
@@ -18,6 +20,7 @@ const userSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Blog",
+      autopopulate: true,
     },
   ],
 });
@@ -31,6 +34,4 @@ userSchema.set("toJSON", {
   },
 });
 
-const User = mongoose.model("User", userSchema);
-
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);

@@ -1,42 +1,83 @@
+const bcrypt = require("bcrypt");
+
 const Blog = require("../models/blog");
 const User = require("../models/user");
 
-const initialBlogs = [
+const initialData = [
   {
-    title: "React patterns",
-    author: "Michael Chan",
-    url: "https://reactpatterns.com/",
-    likes: 7,
+    name: "Adam",
+    username: "adam_username",
+    password: "adam_password",
+    blogs: [
+      {
+        author: "Adam",
+        title: "Blog 1",
+        url: "/adam/blog_1",
+        likes: 7,
+      },
+    ]
   },
   {
-    title: "Go To Statement Considered Harmful",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-    likes: 5,
+    name: "Sarah",
+    username: "sarah_username",
+    password: "sarah_password",
+    blogs: [
+      {
+        author: "Sarah",
+        title: "Blog 2",
+        url: "/sarah/blog_2",
+        likes: 3,
+      },
+      {
+        author: "Sarah",
+        title: "Blog 3",
+        url: "/sarah/blog_3",
+        likes: 9,
+      },
+      {
+        author: "Sarah",
+        title: "Blog 4",
+        url: "/sarah/blog_4",
+        likes: 35,
+      },
+      {
+        author: "Sarah",
+        title: "Blog 5",
+        url: "/sarah/blog_5",
+        likes: 5,
+      },
+    ]
   },
   {
-    title: "Canonical string reduction",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-    likes: 12,
+    name: "Peter",
+    username: "peter_username",
+    password: "peter_password",
+    blogs: [],
   },
   {
-    title: "First class tests",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-    likes: 10,
-  },
-  {
-    title: "TDD harms architecture",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-    likes: 0,
-  },
-  {
-    title: "Type wars",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    likes: 2,
+    name: "Helen",
+    username: "helen_username",
+    password: "helen_password",
+    blogs: [
+      {
+        author: "Helen",
+        title: "Blog 6",
+        url: "/helen/blog_6",
+        likes: 20,
+      },
+      {
+        author: "Helen",
+        title: "Blog 7",
+        url: "/helen/blog_7",
+        likes: 4,
+      },
+      {
+        author: "Helen",
+        title: "Blog 8",
+        url: "/helen/blog_8",
+        likes: 0,
+      },
+    ]
   },
 ];
 
@@ -48,29 +89,48 @@ const nonExistingId = async () => {
   return blog._id.toString();
 };
 
-const blogsInDb = async (propName, propValue) => {
-  if (propName && propValue) {
-    const blog = await Blog.findOne({ [propName]: propValue });
-    return blog.toJSON();
+const blogsInDb = async (conditions) => {
+  if (conditions) {
+    return Blog.findOne(conditions);
   }
 
-  const blogs = await Blog.find({});
-  return blogs.map((blog) => blog.toJSON());
+  return Blog.find({});
 };
 
-const usersInDb = async (propName, propValue) => {
-  if (propName && propValue) {
-    const user = await User.findOne({ [propName]: propValue });
-    return user.toJSON();
+const usersInDb = async (conditions) => {
+  if (conditions) {
+    return User.findOne(conditions);
   }
 
-  const users = await User.find({});
-  return users.map((user) => user.toJSON());
+  return User.find({});
+};
+
+const saveUserToDb = async (userInfo, salt = 10) => {
+  const passwordHash = await bcrypt.hash(userInfo.password, salt);
+  const user = new User({
+    name: userInfo.name,
+    username: userInfo.username,
+    passwordHash: passwordHash,
+  });
+  return user.save();
+};
+
+const saveBlogToDb = async (blogInfo, user) => {
+  const newBlog = new Blog({
+    author: blogInfo.author,
+    title: blogInfo.title,
+    url: blogInfo.url,
+    likes: blogInfo.likes,
+    user: user._id,
+  });
+  return newBlog.save();
 };
 
 module.exports = {
-  initialBlogs,
+  initialData,
   nonExistingId,
   blogsInDb,
   usersInDb,
+  saveUserToDb,
+  saveBlogToDb,
 };

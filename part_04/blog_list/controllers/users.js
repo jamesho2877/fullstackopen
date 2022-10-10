@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const usersRouter = require("express").Router();
 const User = require("../models/user");
+const middleware = require("../utils/middleware");
 
 usersRouter.post("/", async (request, response) => {
   const { username, name, password } = request.body;
@@ -37,13 +38,12 @@ usersRouter.post("/", async (request, response) => {
   response.status(201).json(savedUser);
 });
 
+
+usersRouter.use(middleware.auth);
+
+
 usersRouter.get("/", async (request, response) => {
-  const users = await User.find({}).populate("blogs", {
-    title: 1,
-    url: 1,
-    author: 1,
-    likes: 1,
-  });
+  const users = await User.find({});
   response.json(users);
 });
 
