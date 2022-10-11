@@ -75,7 +75,7 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      handleSetMessage("Wrong credentials");
+      handleSetMessage("Wrong username and password");
       setTimeout(() => {
         handleSetMessage(null);
       }, 5000);
@@ -112,35 +112,13 @@ const App = () => {
     };
 
     blogService.create(blogObject).then((createdBlog) => {
-      handleSetMessage(`Added blog "${newTitle}`, NOTI_SUCCESS);
+      handleSetMessage(`A new blog "${newTitle}" by "${newAuthor}" added`, NOTI_SUCCESS);
       setBlogs((prev) => prev.concat(createdBlog));
       setNewTitle("");
       setNewAuthor("");
       setNewURL("");
     });
   };
-
-  const blogForm = () => (
-    <>
-      <h2>blogs</h2>
-
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
-
-      <BlogForm
-        newTitle={newTitle}
-        newAuthor={newAuthor}
-        newURL={newURL}
-        onTitleChange={onTitleChange}
-        onAuthorChange={onAuthorChange}
-        onURLChange={onURLChange}
-        onAddBlog={handleAddBlog}
-      />
-
-      <Blogs blogs={blogs} />
-    </>
-  );
 
   return (
     <div>
@@ -155,7 +133,20 @@ const App = () => {
           onLoginSubmit={onLoginSubmit}
         />
       ) : (
-        blogForm()
+        <>
+          <h2>blogs</h2>
+          <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
+          <BlogForm
+            newTitle={newTitle}
+            newAuthor={newAuthor}
+            newURL={newURL}
+            onTitleChange={onTitleChange}
+            onAuthorChange={onAuthorChange}
+            onURLChange={onURLChange}
+            onAddBlog={handleAddBlog}
+          />
+          <Blogs blogs={blogs} />
+        </>
       )}
     </div>
   );
