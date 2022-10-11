@@ -17,3 +17,5 @@ The following exercises can be found in this directory
 ### 5.7*: Blog list frontend, step7
 
 ### 5.8: Blog list frontend, step8
+
+### 5.9: Blog list frontend, step9
