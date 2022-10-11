@@ -6,10 +6,11 @@ const BlogForm = ({
   onAuthorChange,
   onURLChange,
   onAddBlog,
+  style,
 }) => {
   return (
-    <form>
-      <h2>create new</h2>
+    <form style={style}>
+      <h2>Create new</h2>
 
       <div>
         Title: <input value={newTitle} onChange={onTitleChange} />
@@ -22,7 +23,7 @@ const BlogForm = ({
       </div>
       <div>
         <button type="submit" onClick={onAddBlog}>
-          create
+          Create
         </button>
       </div>
     </form>

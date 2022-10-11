@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Blogs from "./components/Blogs";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
+import Togglable from "./components/Togglable";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Notification, {
@@ -134,17 +135,20 @@ const App = () => {
         />
       ) : (
         <>
-          <h2>blogs</h2>
-          <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-          <BlogForm
-            newTitle={newTitle}
-            newAuthor={newAuthor}
-            newURL={newURL}
-            onTitleChange={onTitleChange}
-            onAuthorChange={onAuthorChange}
-            onURLChange={onURLChange}
-            onAddBlog={handleAddBlog}
-          />
+          <h2>Blogs</h2>
+          <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
+
+          <Togglable buttonLabel="New blog">
+            <BlogForm
+              newTitle={newTitle}
+              newAuthor={newAuthor}
+              newURL={newURL}
+              onTitleChange={onTitleChange}
+              onAuthorChange={onAuthorChange}
+              onURLChange={onURLChange}
+              onAddBlog={handleAddBlog}
+            />
+          </Togglable>
           <Blogs blogs={blogs} />
         </>
       )}
