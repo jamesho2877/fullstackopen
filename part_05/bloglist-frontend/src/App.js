@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blogs from "./components/Blogs";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
@@ -16,10 +16,7 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-
-  const [newTitle, setNewTitle] = useState("");
-  const [newAuthor, setNewAuthor] = useState("");
-  const [newURL, setNewURL] = useState("");
+  const blogFormRef = useRef();
 
   useEffect(() => {
     const getAllBlogs = async () => {
@@ -83,42 +80,16 @@ const App = () => {
     }
   };
 
-  const handleLogout = (event) => {
+  const handleLogout = (e) => {
     window.localStorage.removeItem("loggedBlogAppUser");
     setUser(null);
   };
 
-  const onTitleChange = (e) => {
-    const title = e.target.value;
-    setNewTitle(title);
-  };
-
-  const onAuthorChange = (e) => {
-    const author = e.target.value;
-    setNewAuthor(author);
-  };
-
-  const onURLChange = (e) => {
-    const URL = e.target.value;
-    setNewURL(URL);
-  };
-
-  const handleAddBlog = (e) => {
-    e.preventDefault();
-
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newURL,
-    };
-
-    blogService.create(blogObject).then((createdBlog) => {
-      handleSetMessage(`A new blog "${newTitle}" by "${newAuthor}" added`, NOTI_SUCCESS);
-      setBlogs((prev) => prev.concat(createdBlog));
-      setNewTitle("");
-      setNewAuthor("");
-      setNewURL("");
-    });
+  const handleAddBlog = async (blogObject) => {
+    const createdBlog = await blogService.create(blogObject);
+    handleSetMessage(`A new blog "${createdBlog.title}" by "${createdBlog.author}" added`, NOTI_SUCCESS);
+    setBlogs((prev) => prev.concat(createdBlog));
+    blogFormRef.current.toggleVisibility();
   };
 
   return (
@@ -138,16 +109,8 @@ const App = () => {
           <h2>Blogs</h2>
           <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
 
-          <Togglable buttonLabel="New blog">
-            <BlogForm
-              newTitle={newTitle}
-              newAuthor={newAuthor}
-              newURL={newURL}
-              onTitleChange={onTitleChange}
-              onAuthorChange={onAuthorChange}
-              onURLChange={onURLChange}
-              onAddBlog={handleAddBlog}
-            />
+          <Togglable buttonLabel="New blog" ref={blogFormRef}>
+            <BlogForm onAddBlog={handleAddBlog} />
           </Togglable>
           <Blogs blogs={blogs} />
         </>
