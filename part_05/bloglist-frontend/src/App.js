@@ -88,15 +88,24 @@ const App = () => {
 
   const handleAddBlog = async (blogObject) => {
     const createdBlog = await blogService.create(blogObject);
-    handleSetMessage(`A new blog "${createdBlog.title}" by "${createdBlog.author}" added`, NOTI_SUCCESS);
+    handleSetMessage(
+      `A new blog "${createdBlog.title}" by "${createdBlog.author}" added`,
+      NOTI_SUCCESS
+    );
     setBlogs((prev) => prev.concat(createdBlog));
     blogFormRef.current.toggleVisibility();
   };
 
   const handleIncreaseLike = async (newBlogObj) => {
-    console.log("newBlogObj", newBlogObj);
-    const updatedBlog = await blogService.update(newBlogObj.id, newBlogObj);
-    setBlogs(prev => prev.map(blog => blog.id === newBlogObj.id ? newBlogObj : blog));
+    await blogService.update(newBlogObj.id, newBlogObj);
+    setBlogs((prev) =>
+      prev.map((blog) => (blog.id === newBlogObj.id ? newBlogObj : blog))
+    );
+  };
+
+  const handleDeleteBlog = async (deleteBlog) => {
+    await blogService.delete(deleteBlog.id);
+    setBlogs((prev) => prev.filter((blog) => blog.id !== deleteBlog.id));
   };
 
   return (
@@ -114,12 +123,19 @@ const App = () => {
       ) : (
         <>
           <h2>Blogs</h2>
-          <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
+          <p>
+            {user.name} logged in <button onClick={handleLogout}>Logout</button>
+          </p>
 
           <Togglable openText="New blog" closeText="Cancel" ref={blogFormRef}>
             <BlogForm onAddBlog={handleAddBlog} />
           </Togglable>
-          <Blogs blogs={blogs} onIncreaseLike={handleIncreaseLike} />
+          <Blogs
+            user={user}
+            blogs={blogs}
+            onIncreaseLike={handleIncreaseLike}
+            onDeleteBlog={handleDeleteBlog}
+          />
         </>
       )}
     </div>
