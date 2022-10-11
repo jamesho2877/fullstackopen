@@ -6,6 +6,12 @@
   justify-content: flex-start;
   align-items: flex-start;
   padding: 5px 10px;
+  flex-wrap: wrap;
+}
+
+.blog .break {
+  flex-basis: 100%;
+  height: 0;
 }
 
 .blog .title {

@@ -92,6 +92,12 @@ const App = () => {
     blogFormRef.current.toggleVisibility();
   };
 
+  const handleIncreaseLike = async (newBlogObj) => {
+    console.log("newBlogObj", newBlogObj);
+    const updatedBlog = await blogService.update(newBlogObj.id, newBlogObj);
+    setBlogs(prev => prev.map(blog => blog.id === newBlogObj.id ? newBlogObj : blog));
+  };
+
   return (
     <div>
       <Notification message={noti.message} type={noti.type} />
@@ -112,7 +118,7 @@ const App = () => {
           <Togglable openText="New blog" closeText="Cancel" ref={blogFormRef}>
             <BlogForm onAddBlog={handleAddBlog} />
           </Togglable>
-          <Blogs blogs={blogs} />
+          <Blogs blogs={blogs} onIncreaseLike={handleIncreaseLike} />
         </>
       )}
     </div>
