@@ -110,6 +110,24 @@ describe("<Blog />", () => {
       expect(handleIncreaseLike.mock.calls).toHaveLength(1);
     });
 
+    test("Like button can be clicked more than 1 time as well", async () => {
+      render(
+        <Blog
+          blog={blog}
+          isDeletable={false}
+          onIncreaseLike={handleIncreaseLike}
+          onDeleteBlog={handleDeleteBlog}
+        />
+      );
+      
+      const btnLikeEl = screen.getByText("Like");
+      await user.click(btnLikeEl);
+      await user.click(btnLikeEl);
+      expect(handleIncreaseLike.mock.calls).toHaveLength(2);
+      await user.click(btnLikeEl);
+      expect(handleIncreaseLike.mock.calls).toHaveLength(3);
+    });
+
     test("Delete button is not available if blog post is not deletable, as it is not created by the user", async () => {
       render(
         <Blog
