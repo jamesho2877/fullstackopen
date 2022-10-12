@@ -16,8 +16,8 @@ const Blog = ({ blog, isDeletable, onIncreaseLike, onDeleteBlog }) => {
   return (
     <div className="blog">
       <span className="title">{blog.title} - {blog.author}</span>
-      { isDeletable && <button className="delete-button" onClick={handleClickDelete}>Delete</button> }
-      <Togglable openText="view" closeText="hide">
+      { isDeletable && <button className="blog-delete-button" onClick={handleClickDelete}>Delete</button> }
+      <Togglable openText="View" closeText="Hide">
         <div className="blog-content">
           <div>URL: {blog.url}</div>
           <div>Likes: {blog.likes} <button onClick={handleClickLike}>Like</button></div>

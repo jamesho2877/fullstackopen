@@ -17,8 +17,20 @@ const Togglable = forwardRef(({ openText, closeText, children }, ref) => {
 
   return (
     <>
-      <button style={hideWhenVisible} onClick={toggleVisibility}>{openText}</button>
-      <button style={showWhenVisible} onClick={toggleVisibility}>{closeText}</button>
+      <button
+        data-button-text={openText}
+        style={hideWhenVisible}
+        onClick={toggleVisibility}
+      >
+        {openText}
+      </button>
+      <button
+        data-button-text={closeText}
+        style={showWhenVisible}
+        onClick={toggleVisibility}
+      >
+        {closeText}
+      </button>
       <div className="break"></div>
       <div className="togglable-content" style={showWhenVisible}>
         {children}
