@@ -16,7 +16,7 @@ describe("<Blog />", () => {
   });
 
   describe("Content appearance", () => {
-    test("renders content", async () => {
+    test("Renders content", async () => {
       const emptyHandlerFunc = () => {};
 
       render(
@@ -36,14 +36,66 @@ describe("<Blog />", () => {
       expect(hiddenEl).toBeInTheDocument();
       expect(hiddenEl).not.toBeVisible();
     });
+
+    test("Likes and URL are hidden by default", async () => {
+      const emptyHandlerFunc = () => {};
+
+      render(
+        <Blog
+          blog={blog}
+          isDeletable={false}
+          onIncreaseLike={emptyHandlerFunc}
+          onDeleteBlog={emptyHandlerFunc}
+        />
+      );
+    
+      const hiddenURLEl = screen.getByText(new RegExp(`^URL: ${blog.url}`, "i"));
+      const hiddenLikesEl = screen.getByText(new RegExp(`^Likes: ${blog.likes}`, "i"));
+
+      expect(hiddenURLEl).toBeInTheDocument();
+      expect(hiddenLikesEl).toBeInTheDocument();
+
+      expect(hiddenURLEl).not.toBeVisible();
+      expect(hiddenLikesEl).not.toBeVisible();
+    });
   });
 
   describe("Content interaction", () => {
-    test("Like button can be clicked", async () => {
-      const handleIncreaseLike = jest.fn();
-      const handleDeleteBlog = jest.fn();
-      const user = userEvent.setup();
+    let handleIncreaseLike, handleDeleteBlog, user;
+
+    beforeEach(() => {
+      user = userEvent.setup();
+      handleIncreaseLike = jest.fn();
+      handleDeleteBlog = jest.fn();
+    });
+
+    test("Likes and URL are shown when View button is clicked", async () => {
+      render(
+        <Blog
+          blog={blog}
+          isDeletable={false}
+          onIncreaseLike={handleIncreaseLike}
+          onDeleteBlog={handleDeleteBlog}
+        />
+      );
     
+      const viewButtonEl = screen.getByText("view", { selector: "button" });
+      const urlEl = screen.getByText(new RegExp(`^URL: ${blog.url}`, "i"));
+      const likesEl = screen.getByText(new RegExp(`^Likes: ${blog.likes}`, "i"));
+
+      expect(urlEl).toBeInTheDocument();
+      expect(likesEl).toBeInTheDocument();
+
+      expect(urlEl).not.toBeVisible();
+      expect(likesEl).not.toBeVisible();
+
+      await user.click(viewButtonEl);
+      
+      expect(urlEl).toBeVisible();
+      expect(likesEl).toBeVisible();
+    });
+
+    test("Like button can be clicked", async () => {
       render(
         <Blog
           blog={blog}
@@ -59,9 +111,6 @@ describe("<Blog />", () => {
     });
 
     test("Delete button is not available if blog post is not deletable, as it is not created by the user", async () => {
-      const handleIncreaseLike = jest.fn();
-      const handleDeleteBlog = jest.fn();
-    
       render(
         <Blog
           blog={blog}
@@ -75,13 +124,9 @@ describe("<Blog />", () => {
     });
 
     describe("Delete button is available and can be clicked if blog post is deletable, as it is created by the user", () => {
-      let handleIncreaseLike, handleDeleteBlog, user, btnDeleteEl;
+      let btnDeleteEl;
 
       beforeEach(() => {
-        handleIncreaseLike = jest.fn();
-        handleDeleteBlog = jest.fn();
-        user = userEvent.setup();
-
         render(
           <Blog
             blog={blog}
