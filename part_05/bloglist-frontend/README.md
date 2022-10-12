@@ -31,3 +31,5 @@ The following exercises can be found in this directory
 ### 5.14: Blog list tests, step2
 
 ### 5.15: Blog list tests, step3
+
+### 5.16: Blog list tests, step4
