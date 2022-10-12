@@ -21,3 +21,5 @@ The following exercises can be found in this directory
 ### 5.9: Blog list frontend, step9
 
 ### 5.10: Blog list frontend, step10
+
+### 5.11: Blog list frontend, step11

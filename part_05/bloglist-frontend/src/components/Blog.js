@@ -1,7 +1,8 @@
 import "./Blog.css";
+import PropTypes from "prop-types";
 import Togglable from "./Togglable";
 
-const Blog = ({ blog, onIncreaseLike, isDeletable, onDeleteBlog }) => {
+const Blog = ({ blog, isDeletable, onIncreaseLike, onDeleteBlog }) => {
   const handleClickLike = () => {
     onIncreaseLike({ ...blog, likes: blog.likes + 1 });
   };
@@ -25,6 +26,13 @@ const Blog = ({ blog, onIncreaseLike, isDeletable, onDeleteBlog }) => {
       </Togglable>
     </div>
   );
+};
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  isDeletable: PropTypes.bool.isRequired,
+  onIncreaseLike: PropTypes.func.isRequired,
+  onDeleteBlog: PropTypes.func.isRequired,
 };
 
 export default Blog;

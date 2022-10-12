@@ -3,14 +3,18 @@ module.exports = {
     browser: true,
     es2021: true,
     commonjs: true,
+    "jest/globals": true,
   },
   extends: ["eslint:recommended", "plugin:react/recommended"],
   overrides: [],
   parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["react"],
+  plugins: ["react", "jest"],
   rules: {
     indent: ["error", 2],
     "linebreak-style": ["error", "unix"],
