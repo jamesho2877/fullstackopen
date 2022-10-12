@@ -20,7 +20,7 @@ const Blog = ({ blog, isDeletable, onIncreaseLike, onDeleteBlog }) => {
       <Togglable openText="View" closeText="Hide">
         <div className="blog-content">
           <div>URL: {blog.url}</div>
-          <div>Likes: {blog.likes} <button onClick={handleClickLike}>Like</button></div>
+          <div>Likes: {blog.likes} <button className="blog-like-button" onClick={handleClickLike}>Like</button></div>
         </div>
       </Togglable>
     </div>

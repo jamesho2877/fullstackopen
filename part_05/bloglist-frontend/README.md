@@ -39,3 +39,5 @@ The following exercises can be found in this directory
 ### 5.18: Blog list end to end testing, step2
 
 ### 5.19: Blog list end to end testing, step3
+
+### 5.20: Blog list end to end testing, step4

@@ -53,14 +53,7 @@ blogsRouter.put("/:id", async (request, response) => {
   const blogId = request.params.id;
   const { likes } = request.body || {};
 
-  const blog = await Blog.findOne({ _id: blogId, user: { _id: request.userId } });
-  if (!blog) {
-    return response.status(400).json({
-      error: `blog ${blogId} is not existed`,
-    });
-  }
-
-  const updatedPerson = await Blog.findByIdAndUpdate(
+  const updatedBlog = await Blog.findByIdAndUpdate(
     blogId,
     { likes },
     {
@@ -71,7 +64,7 @@ blogsRouter.put("/:id", async (request, response) => {
     }
   );
   
-  response.json(updatedPerson);
+  response.json(updatedBlog);
 });
 
 module.exports = blogsRouter;
