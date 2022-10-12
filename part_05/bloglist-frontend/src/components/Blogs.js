@@ -8,8 +8,8 @@ const Blogs = ({ blogs, user, onIncreaseLike, onDeleteBlog }) => {
       <Blog
         key={blog.id}
         blog={blog}
-        onIncreaseLike={onIncreaseLike}
         isDeletable={isDeletable}
+        onIncreaseLike={onIncreaseLike}
         onDeleteBlog={onDeleteBlog}
       />
     );

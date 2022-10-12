@@ -15,11 +15,10 @@ const Blog = ({ blog, isDeletable, onIncreaseLike, onDeleteBlog }) => {
 
   return (
     <div className="blog">
-      <span className="title">{blog.title}</span>
+      <span className="title">{blog.title} - {blog.author}</span>
       { isDeletable && <button className="delete-button" onClick={handleClickDelete}>Delete</button> }
       <Togglable openText="view" closeText="hide">
         <div className="blog-content">
-          <div>Author: {blog.author}</div>
           <div>URL: {blog.url}</div>
           <div>Likes: {blog.likes} <button onClick={handleClickLike}>Like</button></div>
         </div>
