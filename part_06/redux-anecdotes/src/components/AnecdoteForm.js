@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { createNew } from "../reducers/anecdoteReducer";
+import { showMessage } from "../reducers/notificationReducer";
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,8 @@ const AnecdoteForm = () => {
 
     formEl.content.value = "";
     dispatch(createNew(content));
+    dispatch(showMessage(`You created "${content}"`));
+    window.setTimeout(() => dispatch(showMessage("")), 5000);
   };
 
   return (
