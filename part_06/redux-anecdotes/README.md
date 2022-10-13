@@ -13,3 +13,5 @@ The following exercises can be found in this directory
 ### 6.7: anecdotes, step5
 
 ### 6.8: anecdotes, step6
+
+### 6.9: Better anecdotes, step7
