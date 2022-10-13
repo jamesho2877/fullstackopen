@@ -3,3 +3,5 @@
 The following exercises can be found in this directory
 
 ### 6.3: anecdotes, step1
+
+### 6.4: anecdotes, step2
