@@ -121,6 +121,38 @@ describe("Blog app", function () {
             cy.get(`.blog-delete-button`).should("not.exist");
           });
       });
+
+      it("Blogs are in DESC order of likes", function () {
+        cy.get(".blog").should("have.length", 2);
+        cy.get(`.blog button[data-button-text="View"]`).click({ multiple: true });
+        cy.get(".blog:first-child")
+          .within(function () {
+            cy.contains(`${blog.title} - ${blog.author}`)
+            cy.contains("Likes: 0");
+          });
+        cy.get(".blog:last-child")
+          .within(function () {
+            cy.contains(`${blog2.title} - ${blog2.author}`)
+            cy.contains("Likes: 0");
+          });
+
+        cy.get(`.blog:last-child .blog-like-button`).click();
+        cy.get(`.blog:last-child .blog-like-button`).click();
+        cy.reload();
+        
+        cy.get(".blog").should("have.length", 2);
+        cy.get(`.blog button[data-button-text="View"]`).click({ multiple: true });
+        cy.get(".blog:first-child")
+          .within(function () {
+            cy.contains(`${blog2.title} - ${blog2.author}`)
+            cy.contains("Likes: 2");
+          });
+        cy.get(".blog:last-child")
+          .within(function () {
+            cy.contains(`${blog.title} - ${blog.author}`)
+            cy.contains("Likes: 0");
+          });
+      });
     });
   });
 });
