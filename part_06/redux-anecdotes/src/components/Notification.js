@@ -1,22 +1,7 @@
-import { useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setNoti } from "../reducers/notificationReducer";
+import { useSelector } from "react-redux";
 
 const Notification = () => {
-  // noti get re-created to help reseting timer every time
-  // do not use: const noti = useSelector((state) => state.noti);
-  const { noti } = useSelector((state) => state);
-  const dispatch = useDispatch();
-  const timerRef = useRef(null);
-
-  useEffect(() => {
-    if (noti) {
-      if (timerRef.current) window.clearTimeout(timerRef.current);
-      timerRef.current = window.setTimeout(() => dispatch(setNoti("")), 5000);
-    }
-    
-    return () => window.clearTimeout(timerRef.current);
-  });
+  const noti = useSelector((state) => state.noti);
 
   const style = {
     border: "solid",

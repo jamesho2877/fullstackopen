@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { createAnecdote } from "../reducers/anecdoteReducer";
 import { setNoti } from "../reducers/notificationReducer";
-import anecdoteService from "../services/anecdotes";
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch();
@@ -14,7 +13,7 @@ const AnecdoteForm = () => {
     if (!content) return;
 
     dispatch(createAnecdote(content));
-    dispatch(setNoti(`You created "${content}"`));
+    dispatch(setNoti(`You created "${content}"`, 5));
     formEl.content.value = "";
   };
 

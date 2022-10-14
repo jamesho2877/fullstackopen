@@ -11,7 +11,7 @@ const AnecdoteList = () => {
 
   const handleUpvote = (anecdote) => {
     dispatch(upvoteAnecdote(anecdote.id));
-    dispatch(setNoti(`You voted "${anecdote.content}"`));
+    dispatch(setNoti(`You voted "${anecdote.content}"`, 5));
   };
 
   const filteredAnecdotes =
