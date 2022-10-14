@@ -29,3 +29,5 @@ The following exercises can be found in this directory
 ### 6.15: Anecdotes and the backend, step3
 
 ### 6.16: Anecdotes and the backend, step4
+
+### 6.17: Anecdotes and the backend, step5
