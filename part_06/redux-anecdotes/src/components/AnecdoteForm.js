@@ -1,20 +1,25 @@
 import { useDispatch } from "react-redux";
 import { createNew } from "../reducers/anecdoteReducer";
 import { setNoti } from "../reducers/notificationReducer";
+import anecdoteService from "../services/anecdotes";
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch();
 
-  const handleCreate = (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault();
 
     const formEl = e.target;
     const content = formEl.content.value || "";
     if (!content) return;
 
+    const newAnecdote = await anecdoteService.createNew({
+      content: content,
+      votes: 0,
+    });
+    dispatch(createNew(newAnecdote));
+    dispatch(setNoti(`You created "${newAnecdote.content}"`));
     formEl.content.value = "";
-    dispatch(createNew(content));
-    dispatch(setNoti(`You created "${content}"`));
   };
 
   return (
@@ -29,7 +34,7 @@ const AnecdoteForm = () => {
         </button>
       </form>
     </>
-  )
+  );
 };
 
 export default AnecdoteForm;
