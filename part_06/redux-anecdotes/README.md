@@ -37,3 +37,5 @@ The following exercises can be found in this directory
 ### 6.19: Anecdotes and connect, step1
 
 ### 6.20: Anecdotes and connect, step2
+
+### 6.21: Anecdotes, the grand finale
