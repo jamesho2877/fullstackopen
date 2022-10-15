@@ -1,126 +1,41 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Blogs from "./components/Blogs";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
 import Togglable from "./components/Togglable";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
-import Notification, {
-  NOTI_SUCCESS,
-  NOTI_ERROR,
-} from "./components/Notification";
+import Notification from "./components/Notification";
+import { initializeBlogs } from "./reducers/blogReducer";
+import { logout, retrieveUserData } from "./reducers/userReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [noti, setNoti] = useState({});
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const blogFormRef = useRef();
 
-  useEffect(() => {
-    const getAllBlogs = async () => {
-      const allBlogs = await blogService.getAll();
-      allBlogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(allBlogs);
-    };
-
-    getAllBlogs();
-  }, [user]);
+  console.log("user", user);
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
-    if (loggedUserJSON) {
-      const userData = JSON.parse(loggedUserJSON);
-      setUser(userData);
-      blogService.setToken(userData.token);
-    }
-  }, []);
+    console.log("init blogs");
+    dispatch(initializeBlogs());
+  }, [dispatch]);
 
-  const handleSetMessage = (messageText, messageType = NOTI_ERROR) => {
-    setNoti({
-      message: messageText,
-      type: messageType,
-    });
-    window.setTimeout(() => setNoti({}), 5000);
-  };
+  useEffect(() => {
+    console.log("init user");
+    dispatch(retrieveUserData());
+  }, [dispatch]);
 
-  const onUsernameChange = (e) => {
-    const username = e.target.value;
-    setUsername(username);
-  };
+  const handleLogout = () => dispatch(logout());
 
-  const onPasswordChange = (e) => {
-    const password = e.target.value;
-    setPassword(password);
-  };
-
-  const onLoginSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const userData = await loginService.login({
-        username,
-        password,
-      });
-
-      window.localStorage.setItem(
-        "loggedBlogAppUser",
-        JSON.stringify(userData)
-      );
-
-      blogService.setToken(userData.token);
-      setUser(userData);
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      handleSetMessage("Wrong username and password");
-      setTimeout(() => {
-        handleSetMessage(null);
-      }, 5000);
-    }
-  };
-
-  const handleLogout = (e) => {
-    window.localStorage.removeItem("loggedBlogAppUser");
-    setUser(null);
-  };
-
-  const handleAddBlog = async (blogObject) => {
-    const createdBlog = await blogService.create(blogObject);
-    handleSetMessage(
-      `A new blog "${createdBlog.title}" by "${createdBlog.author}" added`,
-      NOTI_SUCCESS
-    );
-    setBlogs((prev) => prev.concat(createdBlog));
+  const handleToggleForm = () => {
     blogFormRef.current.toggleVisibility();
-  };
-
-  const handleIncreaseLike = async (newBlogObj) => {
-    await blogService.update(newBlogObj.id, newBlogObj);
-    setBlogs((prev) =>
-      prev.map((blog) => (blog.id === newBlogObj.id ? newBlogObj : blog))
-    );
-  };
-
-  const handleDeleteBlog = async (deleteBlog) => {
-    await blogService.delete(deleteBlog.id);
-    setBlogs((prev) => prev.filter((blog) => blog.id !== deleteBlog.id));
   };
 
   return (
     <div>
-      <Notification message={noti.message} type={noti.type} />
+      <Notification />
 
-      {user === null ? (
-        <LoginForm
-          username={username}
-          password={password}
-          onUsernameChange={onUsernameChange}
-          onPasswordChange={onPasswordChange}
-          onLoginSubmit={onLoginSubmit}
-        />
-      ) : (
+      {user ? (
         <>
           <h2>Blogs</h2>
           <p>
@@ -131,15 +46,13 @@ const App = () => {
           </p>
 
           <Togglable openText="New blog" closeText="Cancel" ref={blogFormRef}>
-            <BlogForm onAddBlog={handleAddBlog} />
+            <BlogForm onToggleForm={handleToggleForm} />
           </Togglable>
-          <Blogs
-            user={user}
-            blogs={blogs}
-            onIncreaseLike={handleIncreaseLike}
-            onDeleteBlog={handleDeleteBlog}
-          />
+
+          <Blogs />
         </>
+      ) : (
+        <LoginForm />
       )}
     </div>
   );

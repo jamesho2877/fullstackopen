@@ -1,7 +1,20 @@
+import { useSelector, useDispatch } from "react-redux";
 import Blog from "./Blog";
-import PropTypes from "prop-types";
+import { likeBlog, deleteBlog } from "../reducers/blogReducer";
 
-const Blogs = ({ blogs, user, onIncreaseLike, onDeleteBlog }) => {
+const Blogs = () => {
+  const dispatch = useDispatch();
+  const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.user);
+
+  const handleLikeBlog = (blogId) => {
+    dispatch(likeBlog(blogId));
+  };
+
+  const handleDeleteBlog = (blogId) => {
+    dispatch(deleteBlog(blogId));
+  };
+
   const blogListDOM = blogs.map((blog) => {
     const isDeletable = blog.user.username === user.username;
     return (
@@ -9,20 +22,13 @@ const Blogs = ({ blogs, user, onIncreaseLike, onDeleteBlog }) => {
         key={blog.id}
         blog={blog}
         isDeletable={isDeletable}
-        onIncreaseLike={onIncreaseLike}
-        onDeleteBlog={onDeleteBlog}
+        onLikeBlog={handleLikeBlog}
+        onDeleteBlog={handleDeleteBlog}
       />
     );
   });
 
   return <div style={{ marginTop: "20px" }}>{blogListDOM}</div>;
-};
-
-Blogs.propTypes = {
-  blogs: PropTypes.array.isRequired,
-  user: PropTypes.object.isRequired,
-  onIncreaseLike: PropTypes.func.isRequired,
-  onDeleteBlog: PropTypes.func.isRequired,
 };
 
 export default Blogs;
