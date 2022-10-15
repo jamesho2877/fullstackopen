@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useField } from "../hooks";
-import { login } from "../reducers/userReducer";
+import { login } from "../reducers/authReducer";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
