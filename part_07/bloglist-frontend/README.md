@@ -15,3 +15,5 @@ The following exercises can be found in this directory
 ### 7.14: Users view
 
 ### 7.15: Individual user view
+
+### 7.16: Blog view

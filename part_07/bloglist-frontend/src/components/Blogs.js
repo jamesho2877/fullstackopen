@@ -6,6 +6,7 @@ const Blogs = () => {
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs);
   const auth = useSelector((state) => state.auth);
+  if (!auth) return null;
 
   const handleLikeBlog = (blogId) => {
     dispatch(likeBlog(blogId));
@@ -16,7 +17,7 @@ const Blogs = () => {
   };
 
   const blogListDOM = blogs.map((blog) => {
-    const isDeletable = blog.user.username === auth.username;
+    const isDeletable = blog.user?.username === auth?.username || false;
     return (
       <Blog
         key={blog.id}

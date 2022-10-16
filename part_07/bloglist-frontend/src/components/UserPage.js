@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getUsers } from "../reducers/userReducer";
 
-const User = () => {
+const UserPage = () => {
   const dispatch = useDispatch();
   const { id: userId } = useParams();
 
@@ -22,4 +22,4 @@ const User = () => {
   ) : null;
 };
 
-export default User;
+export default UserPage;

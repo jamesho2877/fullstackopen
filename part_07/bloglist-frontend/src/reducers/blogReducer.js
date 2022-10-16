@@ -30,7 +30,7 @@ const blogSlice = createSlice({
 
 const { setBlogs, addBlog, updateBlog, removeBlog } = blogSlice.actions;
 
-export const initializeBlogs = () => {
+export const getBlogs = () => {
   return async (dispatch) => {
     const allBlogs = await blogService.getAll();
     dispatch(setBlogs(allBlogs));

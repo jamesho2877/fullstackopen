@@ -1,5 +1,6 @@
-import "./Blog.css";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import "./Blog.css";
 import Togglable from "./Togglable";
 
 const Blog = ({ blog, isDeletable, onLikeBlog, onDeleteBlog }) => {
@@ -18,7 +19,7 @@ const Blog = ({ blog, isDeletable, onLikeBlog, onDeleteBlog }) => {
   return (
     <div className="blog">
       <span className="title">
-        {blog.title} - {blog.author}
+        <Link to={`/blogs/${blog.id}`}>{blog.title} - {blog.author}</Link>
       </span>
 
       {isDeletable && (

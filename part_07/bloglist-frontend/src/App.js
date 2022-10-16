@@ -1,11 +1,10 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Blogs from "./components/Blogs";
 import BlogForm from "./components/BlogForm";
 import LoginForm from "./components/LoginForm";
 import Togglable from "./components/Togglable";
 import Notification from "./components/Notification";
-import { initializeBlogs } from "./reducers/blogReducer";
+import { getBlogs } from "./reducers/blogReducer";
 import { logout, retrieveUserData } from "./reducers/authReducer";
 import Routes from "./Routes";
 
@@ -15,7 +14,7 @@ const App = () => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    dispatch(initializeBlogs());
+    dispatch(getBlogs());
   }, [dispatch]);
 
   useEffect(() => {
