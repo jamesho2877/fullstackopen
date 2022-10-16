@@ -5,8 +5,9 @@ import LoginForm from "./components/LoginForm";
 import Togglable from "./components/Togglable";
 import Notification from "./components/Notification";
 import { getBlogs } from "./reducers/blogReducer";
-import { logout, retrieveUserData } from "./reducers/authReducer";
+import { retrieveUserData } from "./reducers/authReducer";
 import Routes from "./Routes";
+import Header from "./components/Header";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const App = () => {
     dispatch(retrieveUserData());
   }, [dispatch]);
 
-  const handleLogout = () => dispatch(logout());
+  
 
   const handleToggleForm = () => {
     blogFormRef.current.toggleVisibility();
@@ -33,14 +34,8 @@ const App = () => {
 
       {auth ? (
         <>
+          <Header />
           <h2>Blogs</h2>
-          <p>
-            {auth.name} logged in{" "}
-            <button id="logout-button" onClick={handleLogout}>
-              Logout
-            </button>
-          </p>
-
           <Togglable openText="New blog" closeText="Cancel" ref={blogFormRef}>
             <BlogForm onToggleForm={handleToggleForm} />
           </Togglable>
