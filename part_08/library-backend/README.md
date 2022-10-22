@@ -13,3 +13,5 @@ The following exercises can be found in this directory
 ### 8.5: Books by genre
 
 ### 8.6: Adding a book
+
+### 8.7: Updating the birth year of an author

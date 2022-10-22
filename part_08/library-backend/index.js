@@ -113,6 +113,12 @@ const typeDefs = gql`
       genres: [String!]!
     ): Book
   }
+  type Mutation {
+    editAuthor (
+      name: String!
+      setBornTo: Int!
+    ): Author
+  }
 `;
 
 const resolvers = {
@@ -163,6 +169,18 @@ const resolvers = {
       }
 
       return newBook;
+    },
+    editAuthor: (root, args) => {
+      const existingAuthor = authors.find((author) => author.name === args.name);
+      if (!existingAuthor) return null;
+
+      const updatedAuthor = { ...existingAuthor, born: args.setBornTo };
+
+      authors = authors.map((author) => {
+        return author.name === args.name ? updatedAuthor : author;
+      });
+
+      return updatedAuthor;
     },
   },
 };
