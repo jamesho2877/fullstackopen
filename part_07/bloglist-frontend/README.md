@@ -25,3 +25,5 @@ The following exercises can be found in this directory
 ### 7.19: comments, step2
 
 ### 7.20: Styles, step1
+
+### 7.21: Styles, step2
