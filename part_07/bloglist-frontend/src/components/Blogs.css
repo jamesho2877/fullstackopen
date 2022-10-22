@@ -1,0 +1,13 @@
+.blogs-page {
+  max-width: 100%;
+}
+
+.blog-list {
+  margin: 20px 0 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.blog-list .blog-item:nth-child(2n) {
+  background-color: #f6f6f6;
+}

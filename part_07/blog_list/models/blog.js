@@ -28,6 +28,13 @@ const blogSchema = new mongoose.Schema({
     ref: "User",
     autopopulate: true,
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+      autopopulate: true,
+    },
+  ],
 });
 
 blogSchema.set("toJSON", {

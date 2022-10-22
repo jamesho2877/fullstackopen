@@ -16,6 +16,15 @@ const getAllItems = async () => {
   return response.data;
 };
 
+const addItemComment = async (id, newComment) => {
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    { content: newComment },
+    config
+  );
+  return response.data;
+};
+
 const createItem = async (newObject) => {
   const response = await axios.post(baseUrl, newObject, config);
   return response.data;
@@ -37,4 +46,5 @@ export default {
   create: createItem,
   update: updateItem,
   delete: deleteItem,
+  addComment: addItemComment,
 };

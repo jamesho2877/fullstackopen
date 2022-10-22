@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import ListGroup from "react-bootstrap/ListGroup";
+import { Button } from "react-bootstrap";
+import { HandThumbsUp } from "react-bootstrap-icons";
 import "./Blog.css";
 import Togglable from "./Togglable";
 
@@ -17,29 +20,41 @@ const Blog = ({ blog, isDeletable, onLikeBlog, onDeleteBlog }) => {
   };
 
   return (
-    <div className="blog">
+    <ListGroup.Item className="blog-item">
       <span className="title">
-        <Link to={`/blogs/${blog.id}`}>{blog.title} - {blog.author}</Link>
+        <Link to={`/blogs/${blog.id}`}>
+          {blog.title} - {blog.author}
+        </Link>
       </span>
 
       {isDeletable && (
-        <button className="blog-delete-button" onClick={handleClickDelete}>
+        <Button
+          className="blog-delete-button"
+          variant="outline-secondary"
+          size="sm"
+          onClick={handleClickDelete}
+        >
           Delete
-        </button>
+        </Button>
       )}
 
       <Togglable openText="View" closeText="Hide">
         <div className="blog-content">
           <div>URL: {blog.url}</div>
           <div>
-            Likes: {blog.likes}{" "}
-            <button className="blog-like-button" onClick={handleClickLike}>
-              Like
-            </button>
+            Likes: {blog.likes}
+            <Button
+              className="blog-like-button"
+              variant="outline-secondary"
+              size="sm"
+              onClick={handleClickLike}
+            >
+              <HandThumbsUp />
+            </Button>
           </div>
         </div>
       </Togglable>
-    </div>
+    </ListGroup.Item>
   );
 };
 

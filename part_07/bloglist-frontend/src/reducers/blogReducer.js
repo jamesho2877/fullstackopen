@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import blogService from "../services/blogs";
-import { setNoti, NOTI_SUCCESS } from "./notificationReducer";
+import { setNoti, NOTI_SUCCESS, NOTI_ERROR } from "./notificationReducer";
 
 const initialState = [];
 
@@ -48,6 +48,14 @@ export const createBlog = (blogObject) => {
         NOTI_SUCCESS
       )
     );
+  };
+};
+
+export const addComment = (blogId, newComment) => {
+  return async (dispatch) => {
+    const updatedBlog = await blogService.addComment(blogId, newComment);
+    dispatch(updateBlog(updatedBlog));
+    dispatch(setNoti("A new comment added", NOTI_SUCCESS));
   };
 };
 

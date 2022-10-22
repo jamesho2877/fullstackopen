@@ -1,29 +1,11 @@
-.blog {
-  margin-bottom: 15px;
-  border: 1px solid #000;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 5px 10px;
-  flex-wrap: wrap;
+.title {
+  margin-right: 10px;
 }
 
-.blog .break {
-  flex-basis: 100%;
-  height: 0;
+.blog-like-button {
+  margin: 0 10px 0;
 }
 
-.blog .title {
-  margin-right: 5px;
-  font-weight: 500;
-  font-size: 1.2em;
-}
-
-.blog .delete-button {
-  margin-right: 5px;
-}
-
-.blog .blog-delete-button {
-  margin-right: 5px;
+.blog-delete-button {
+  margin: 0 10px 0 0;
 }

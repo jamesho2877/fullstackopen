@@ -1,4 +1,6 @@
 import { useDispatch } from "react-redux";
+import { Button, Form } from "react-bootstrap";
+import "./BlogForm.css";
 import { useField } from "../hooks";
 import { createBlog } from "../reducers/blogReducer";
 
@@ -26,42 +28,43 @@ const BlogForm = (props) => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <h2>Create a new blog</h2>
+    <Form id="blog-form" onSubmit={handleFormSubmit}>
+      <h5>Create a new blog</h5>
 
-      <div>
-        Title:{" "}
-        <input
+      <Form.Group className="mb-3">
+        <Form.Label>Title</Form.Label>
+        <Form.Control
           id="blog-title"
           type={title.type}
           value={title.value}
           onChange={title.onChange}
         />
-      </div>
-      <div>
-        Author:{" "}
-        <input
+      </Form.Group>
+
+      <Form.Group className="mb-3">
+        <Form.Label>Author</Form.Label>
+        <Form.Control
           id="blog-author"
           type={author.type}
           value={author.value}
           onChange={author.onChange}
         />
-      </div>
-      <div>
-        URL:{" "}
-        <input
+      </Form.Group>
+
+      <Form.Group className="mb-3">
+        <Form.Label>URL</Form.Label>
+        <Form.Control
           id="blog-url"
           type={url.type}
           value={url.value}
           onChange={url.onChange}
         />
-      </div>
-      <div>
-        <button id="blog-create-button" type="submit">
-          Create
-        </button>
-      </div>
-    </form>
+      </Form.Group>
+
+      <Button id="blog-create-button" variant="primary" type="submit">
+        Create
+      </Button>
+    </Form>
   );
 };
 

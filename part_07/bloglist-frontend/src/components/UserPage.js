@@ -12,12 +12,12 @@ const UserPage = () => {
   }, [dispatch]);
 
   const users = useSelector((state) => state.users);
-  const user = users?.find(u => u.id === userId) || null;
+  const user = users?.find((u) => u.id === userId) || null;
 
   return user ? (
     <div>
-      <h2>User [{user.username}]</h2>
-      <p>Name: {user.name}</p>
+      <h4>User: {user.name}</h4>
+      <p>The number of blogs: {user.blogs?.length || 0}</p>
     </div>
   ) : null;
 };

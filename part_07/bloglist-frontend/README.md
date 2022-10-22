@@ -19,3 +19,5 @@ The following exercises can be found in this directory
 ### 7.16: Blog view
 
 ### 7.17: Navigation
+
+### 7.18: comments, step1
