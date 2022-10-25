@@ -15,3 +15,5 @@ The following exercises can be found in this directory
 ### 8.14: Database, part 2
 
 ### 8.15 Database, part 3
+
+### 8.17 Listing books
