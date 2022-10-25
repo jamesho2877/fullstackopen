@@ -3,7 +3,7 @@ import { useState } from "react";
 import { UPDATE_BIRTHYEAR, ALL_AUTHORS } from "../queries";
 
 const BirthYearForm = ({ authors }) => {
-  const [author, setAuthor] = useState("");
+  const [author, setAuthor] = useState(authors?.[0]?.name || "");
   const [birthyear, setBirthyear] = useState("");
 
   const [updateBirthyear, updateBirthyearResult] = useMutation(UPDATE_BIRTHYEAR, {
@@ -30,7 +30,7 @@ const BirthYearForm = ({ authors }) => {
       <div>
         name
         <select value={author} onChange={({ target }) => setAuthor(target.value)}>
-          {authors.map((author) => (
+          {authors.map((author, idx) => (
             <option key={author.name} value={author.name}>{author.name}</option>
           ))}
         </select>

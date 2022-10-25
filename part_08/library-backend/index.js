@@ -22,7 +22,6 @@ const typeDefs = gql`
   type Author {
     name: String!
     born: Int
-    bookCount: Int!
     id: ID!
   }
   type Book {
@@ -39,7 +38,7 @@ const typeDefs = gql`
   }
   type Query {
     bookCount: Int!
-    allBooks(author: String, genre: String): [Book!]!
+    allBooks (author: String, genre: String): [Book!]!
   }
 
   type Mutation {
@@ -63,7 +62,7 @@ const resolvers = {
     authorCount: async () => Author.collection.countDocuments(),
     bookCount: async () => Book.collection.countDocuments(),
     allBooks: async (root, { author, genre }) => {
-      const books = await Book.find({});
+      const books = await Book.find({}).populate("author").exec();
       if (!author && !genre) return books;
 
       if (author && genre) {
@@ -77,38 +76,25 @@ const resolvers = {
       }
     },
     allAuthors: async () => {
-      const [books, authors] = await Promise.all([Book.find({}), Author.find({})]);
-      
-      const bookCountByAuthor = books.reduce((acc, book) => {
-        const author = book.author;
-        const count = acc[author] || 0;
-        acc[author] = count + 1;
-        return acc;
-      }, {});
-
-      return authors.map((author) => {
-        return {
-          ...author,
-          bookCount: bookCountByAuthor[author.name] || 0,
-        }
-      });
+      return Author.find({});
     },
   },
   Mutation: {
     addBook: async (root, args) => {
       try {
-        const book = new Book({ ...args });
-        const newBook = await book.save();
-
-        const existingAuthor = await Author.findOne({ name: newBook.author });
-        if (!existingAuthor) {
-          const newAuthor = new Author({
-            name: newBook.author,
-            bookCount: 1,
-            born: null,
-          });
-          await newAuthor.save();
+        const bookParams = { ...args };
+        const existingAuthor = await Author.findOne({ name: bookParams.author });
+        
+        let author;
+        if (existingAuthor) {
+          author = existingAuthor;
+        } else {
+          const newAuthor = new Author({ name: bookParams.author });
+          author = await newAuthor.save();
         }
+
+        const book = new Book({ ...bookParams, author: author });
+        const newBook = await book.save();
 
         return newBook;
       } catch (err) {
@@ -119,7 +105,8 @@ const resolvers = {
     },
     editAuthor: async (root, args) => {
       try {
-        const existingAuthor = await Author.findOne({ name: args.name });
+        const authorName = args.name;
+        const existingAuthor = await Author.findOne({ name: authorName });
         if (!existingAuthor) return null;
 
         existingAuthor.born = args.setBornTo;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
+import "./App.css";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";

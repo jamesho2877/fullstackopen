@@ -17,3 +17,5 @@ The following exercises can be found in this directory
 ### 8.7: Updating the birth year of an author
 
 ### 8.13: Database, part 1
+
+### 8.14: Database, part 2
