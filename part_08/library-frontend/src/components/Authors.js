@@ -23,7 +23,7 @@ const Authors = ({ authors, show }) => {
         </tbody>
       </table>
 
-      <BirthYearForm />
+      <BirthYearForm authors={authors} />
     </div>
   );
 };
