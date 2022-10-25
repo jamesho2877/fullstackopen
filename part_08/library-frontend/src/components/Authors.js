@@ -1,3 +1,5 @@
+import BirthYearForm from "./BirthYearForm";
+
 const Authors = ({ authors, show }) => {
   if (!show) return null;
 
@@ -20,6 +22,8 @@ const Authors = ({ authors, show }) => {
           ))}
         </tbody>
       </table>
+
+      <BirthYearForm />
     </div>
   );
 };

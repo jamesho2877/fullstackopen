@@ -1,0 +1,50 @@
+import { useMutation } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { UPDATE_BIRTHYEAR, ALL_AUTHORS } from "../queries";
+
+const BirthYearForm = () => {
+  const [author, setAuthor] = useState("");
+  const [birthyear, setBirthyear] = useState("");
+
+  const [updateBirthyear, updateBirthyearResult] = useMutation(UPDATE_BIRTHYEAR, {
+    refetchQueries: [{ query: ALL_AUTHORS }],
+  });
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    updateBirthyear({
+      variables: {
+        author: author,
+        birthyear: Number(birthyear),
+      },
+    });
+
+    setAuthor("");
+    setBirthyear("");
+  };
+
+  return (
+    <form onSubmit={submit}>
+      <h4>Set birthyear</h4> 
+      <div>
+        name
+        <input
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+        />
+      </div>
+      <div>
+        born
+        <input
+          type="number"
+          value={birthyear}
+          onChange={({ target }) => setBirthyear(target.value)}
+        />
+      </div>
+      <button type="submit">update author</button>
+    </form>
+  );
+};
+
+export default BirthYearForm;

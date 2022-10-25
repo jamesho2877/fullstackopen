@@ -40,3 +40,18 @@ export const ADD_BOOK = gql`
     }
   }
 `;
+
+export const UPDATE_BIRTHYEAR = gql`
+  mutation editAuthor (
+    $author: String!
+    $birthyear: Int!
+  ) {
+    editAuthor (
+      name: $author
+      setBornTo: $birthyear
+    ) {
+      name
+      born
+    }
+  }
+`;
