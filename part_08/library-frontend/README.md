@@ -19,3 +19,5 @@ The following exercises can be found in this directory
 ### 8.17 Listing books
 
 ### 8.18 Log in
+
+### 8.19 Books by genre, part 1
