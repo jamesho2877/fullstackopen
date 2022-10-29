@@ -1,12 +1,21 @@
 import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { RECOMMENDED_BOOKS } from "../queries";
 
 const Books = ({ books, show }) => {
   const [filteredGenre, setFilteredGenre] = useState(null);
+  const recommendedBooks = useQuery(RECOMMENDED_BOOKS, {
+    variables: {
+      genre: filteredGenre,
+    },
+  });
+
+  if (recommendedBooks.loading) {
+    return <div>loading...</div>;
+  };
 
   const genres = books.reduce((acc, book) => acc.concat(book.genres), []);
   const uniqueGenres = genres.filter((genre, idx, arr) => arr.indexOf(genre) === idx);
-
-  const filteredBooks = filteredGenre ? books.filter(b => b.genres.includes(filteredGenre)) : books;
 
   const handleSelectGenreFilter = (selectedGenre) => {
     if (filteredGenre === selectedGenre) setFilteredGenre(null);
@@ -28,7 +37,7 @@ const Books = ({ books, show }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filteredBooks.map((a) => (
+          {recommendedBooks.data.allBooks.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>

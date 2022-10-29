@@ -23,3 +23,5 @@ The following exercises can be found in this directory
 ### 8.19 Books by genre, part 1
 
 ### 8.20 Books by genre, part 2
+
+### 8.21 books by genre with GraphQL
