@@ -25,3 +25,5 @@ The following exercises can be found in this directory
 ### 8.23: Subscriptions - server
 
 ### 8.24: Subscriptions - client, part 1
+
+### 8.25: Subscriptions - client, part 2

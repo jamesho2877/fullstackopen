@@ -29,3 +29,5 @@ The following exercises can be found in this directory
 ### 8.22 Up-to-date cache and book recommendations
 
 ### 8.24: Subscriptions - client, part 1
+
+### 8.25: Subscriptions - client, part 2
