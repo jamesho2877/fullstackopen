@@ -1,15 +1,11 @@
 require("dotenv").config({ path: "./.env.local" });
 
-const { ApolloServer } = require("@apollo/server");
-const { expressMiddleware } = require("@apollo/server/express4");
+const { ApolloServer } = require("apollo-server-express");
 const { ApolloServerPluginDrainHttpServer } = require("apollo-server-core");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 const express = require("express");
 const { createServer } = require("http");
-const bodyParser = require("body-parser");
-const cors = require("cors");
 
-// const { execute, subscribe } = require("graphql");
 const { WebSocketServer } = require("ws");
 const { useServer } = require("graphql-ws/lib/use/ws");
 
@@ -42,7 +38,7 @@ const start = async () => {
   // Create our WebSocket server using the HTTP server we just set up
   const wsServer = new WebSocketServer({
     server: httpServer,
-    path: "/graphql",
+    path: "/",
   });
 
   // Save the returned server's info so we can shutdown this server later
@@ -76,7 +72,7 @@ const start = async () => {
   });
 
   await server.start();
-  app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server));
+  server.applyMiddleware({ app, path: "/" });
 
   const PORT = 4000;
   httpServer.listen(PORT, () =>

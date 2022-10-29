@@ -38,7 +38,7 @@ const Books = ({ books, show }) => {
             <th>published</th>
           </tr>
           {recommendedBooks.data.allBooks.map((a) => (
-            <tr key={a.title}>
+            <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
               <td>{a.published}</td>

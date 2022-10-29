@@ -27,3 +27,5 @@ The following exercises can be found in this directory
 ### 8.21 books by genre with GraphQL
 
 ### 8.22 Up-to-date cache and book recommendations
+
+### 8.24: Subscriptions - client, part 1

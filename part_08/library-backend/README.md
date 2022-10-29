@@ -23,3 +23,5 @@ The following exercises can be found in this directory
 ### 8.16 user and logging in
 
 ### 8.23: Subscriptions - server
+
+### 8.24: Subscriptions - client, part 1

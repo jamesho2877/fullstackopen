@@ -8,7 +8,7 @@ const RecommendBooks = ({ books, show }) => {
     return <div>loading...</div>;
   }
 
-  const favGenre = userInfo.data.me.favouriteGenre || null;
+  const favGenre = userInfo.data.me?.favouriteGenre || null;
   const filteredBooks = favGenre ? books.filter(b => b.genres.includes(favGenre)) : books;
 
   if (!show) return null;
@@ -27,7 +27,7 @@ const RecommendBooks = ({ books, show }) => {
             <th>published</th>
           </tr>
           {filteredBooks.map((a) => (
-            <tr key={a.title}>
+            <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
               <td>{a.published}</td>
